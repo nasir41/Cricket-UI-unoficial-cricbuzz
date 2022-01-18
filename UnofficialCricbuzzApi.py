@@ -56,7 +56,6 @@ def CallApiGetBowlers(id):
 
     response = requests.request("GET", url, headers=headers, params=querystring)
 
-    print(response.text)
     return json.loads(response.text)    
 
 def GetAllMatchesList():

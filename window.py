@@ -123,5 +123,5 @@ title_text=canvas.create_text(
     font = ("Alatsi-Regular", int(30.0)))
 
 window.resizable(False, False)
-# window.mainloop()
+window.mainloop()
 
