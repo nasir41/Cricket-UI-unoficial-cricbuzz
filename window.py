@@ -46,48 +46,64 @@ matchstatus_text=canvas.create_text(
     385.5, 212.0,
     text = "Pakistan have won the toss and elected to feild first!\nPlay in Progress!",
     fill = "#ffffff",
+    anchor=CENTER,
+    justify= CENTER,
     font = ("Alatsi-Regular", int(20.0)))
 
 lastBall_text=canvas.create_text(
     385.5, 250,
     text = "",
     fill = "#481c1c",
+    anchor=CENTER,
+    justify= CENTER,
     font = ("Alatsi-Regular", int(15.0)))
 
 partnership_text=canvas.create_text(
     392.0, 490.0,
     text = "0",
     fill = "#ffffff",
+    anchor=CENTER,
+    justify= CENTER,
     font = ("Alatsi-Regular", int(20.0)))
 
 batsman1_text=canvas.create_text(
     163.5, 471.0,
     text = "33\n(14)\nbatsman1_text",
     fill = "#ffffff",
-    font = ("Alatsi-Regular", int(20.0)))
+    anchor=CENTER,
+    justify= CENTER,
+    font = ("Alatsi-Regular", int(18)))
 
 batsman2_text=canvas.create_text(
     627.5, 471.0,
     text = "33\n(14)\nbatsman2_text",
     fill = "#ffffff",
-    font = ("Alatsi-Regular", int(20.0)))
+    anchor=CENTER,
+    justify= CENTER,
+    font = ("Alatsi-Regular", int(18)))
 
 bowler1_text=canvas.create_text(
     141.5, 626.0,
     text = "33\n(14)\nbowler1_text",
     fill = "#ffffff",
-    font = ("Alatsi-Regular", int(20.0)))
+    anchor=CENTER,
+    justify= CENTER,
+    font = ("Alatsi-Regular", int(18)))
 
 bowler2_text=canvas.create_text(
     605.5, 626.0,
     text = "33\n(14)\nbowler2_text",
     fill = "#ffffff",
-    font = ("Alatsi-Regular", int(20.0)))
+    anchor=CENTER,
+    justify= CENTER,
+    font = ("Alatsi-Regular", int(18)))
 
 score_text=canvas.create_text(
     374.0, 314.5,
     text = "IND   128/9   (12)",
     fill = "#481c1c",
+    anchor=CENTER,
+    justify= CENTER,
     font = ("Alatsi-Regular", int(40))
     )
 
@@ -102,17 +118,10 @@ title_text=canvas.create_text(
     391.5, 36.5,
     text = "PAKISTAN VS INDIA",
     fill = "#ffffff",
-    font = ("Alatsi-Regular", int(40.0)))
+    anchor=CENTER,
+    justify= CENTER,
+    font = ("Alatsi-Regular", int(30.0)))
 
 window.resizable(False, False)
-
-# ips = (t for t in ('111', '222', '333', '444'))
-# def update_ip():
-#     try:
-#         canvas.itemconfigure(title_text, text=next(ips))
-#         window.after(1000, update_ip)
-#     except StopIteration:
-#         pass
-# update_ip()
 # window.mainloop()
 

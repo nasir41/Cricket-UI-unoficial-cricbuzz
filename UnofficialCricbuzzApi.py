@@ -100,6 +100,10 @@ def GetMatchEid(matches,sVs):
             Eid = x['matchId']
             return Eid
 
+def GetSelectdMatch(matches,sVs):
+    for x in matches:
+        if x['vs'] == sVs:
+            return x
 def GetLastScorecard(match):
     if 'scorecard' not in match:
         return None
@@ -163,11 +167,13 @@ def GetLastInning(overs):
     inningsScore = lastinningsScores['inningsScore']
     
     linningsScore = len(inningsScore)
+#     print(linningsScore)
     if linningsScore <= 0 :
         return None
     
-    lastinningsScore=inningsScore[linningsScore-1]
     
+    lastinningsScore=inningsScore[0]
+    print(lastinningsScore)
     return lastinningsScore
 
 def EmptyScoreCard():
@@ -177,22 +183,54 @@ def GetScorecard(overs):
     if lastInning is None:
         return EmptyScoreCard();
     
+    runs=0
+    wickets=0
+    overs=0
     
-    runs=lastInning['runs']
-    wickets=lastInning['wickets']
-    overs=lastInning['overs']
+    if 'runs' in lastInning:
+        runs=lastInning['runs']
+    if 'wickets' in lastInning:
+        wickets=lastInning['wickets']
+    if 'overs' in lastInning:
+        overs=lastInning['overs']
+    
+   
     batTeamShortName = lastInning['batTeamShortName']
+    
     card = f'{batTeamShortName} {runs}/{wickets}  ({overs} Ov)'
+    
+    
     return card
+def GetTarget(overs):
+    lastInning = GetLastInning(overs)
+    
+    if lastInning is None:
+        return 0;
+    
+    target=0
+    if 'target' in lastInning:
+        target=lastInning['target']
+        
+    return target
 def GetRunrate(overs):
     if 'miniscore' not in overs:
-        return 'Current Run Rate 0'
+        return 'Current RR: 0'
     miniscore=overs['miniscore']
-    if 'crr' not in miniscore:
-        'Current Run Rate 0'
-    crr = miniscore['crr']
-    card = f'Current Run Rate {crr}'
-    return card
+    
+    crr = 0
+    rrr = 0
+    if 'crr' in miniscore:
+        crr=miniscore['crr']
+        
+    if 'rrr' in miniscore:
+        rrr=miniscore['rrr']
+    
+    target = GetTarget(overs)
+    print(target)
+    if rrr == 0 or target == 0:
+        return f'Current RR: {crr}'
+    else:
+        return f'RR:{crr} RRR:{rrr} Target:{target}'
 def GetMatchStatus(overs):
     if 'miniscore' not in overs:
         return ''
@@ -231,7 +269,7 @@ def GetBowlerStat(bowler):
         economy = bowler['economy']
         
     # Economy = bowler['Er']
-    card = f'{name} \n{score}/{wickets} \n({Overs} ov)\n economy {economy}'
+    card = f'{name} \n{score}/{wickets} \n({Overs} ov)\n eco {economy}'
     return card
 
 def GetBowlerNumber(match,number):
@@ -271,14 +309,14 @@ def GetSecondLastBowler(overs,match=None):
     bowlerNonStriker = miniscore['bowlerNonStriker']
     return GetBowlerStat(bowlerNonStriker)
 def GetBatsmanStat(batsman):
-    name = 'batter'
+    name = ''
     runs = 0
     balls = 0
     strkRate=0
     fours = 0
     sixes = 0
     if batsman is None:
-        return  f'{name} \n{runs}/{balls} 4({fours}) 6({sixes}) \n sr({strkRate})'
+        return  f''
     
     if 'name' in batsman:
         name = batsman['name']
@@ -302,10 +340,10 @@ def GetBatsmanStat(batsman):
     return card
 def GetBatsmanNumber(match,number):
     if match is None:
-        return GetBowlerStat(None)
+        return GetBatsmanStat(None)
     scorecard = GetLastScorecard(match)
     if 'batsman' not in scorecard:
-        return GetBowlerStat(None)
+        return GetBatsmanStat(None)
     batsman = scorecard['batsman']
     if len(batsman) > number:
         return GetBatsmanStat(batsman[number])
@@ -326,12 +364,12 @@ def GetBatsman1(overs,match=None):
 def GetBatsman2(overs,match=None):
 
     if 'miniscore' not in overs:
-        return GetBatsmanNumber(match,0)
+        return GetBatsmanNumber(match,1)
     
     miniscore =overs['miniscore']
     
     if 'batsmanNonStriker' not in miniscore:
-        return GetBatsmanNumber(match,0)
+        return GetBatsmanNumber(match,1)
     
     batsmanNonStriker = miniscore['batsmanNonStriker']
     return GetBatsmanStat(batsmanNonStriker)

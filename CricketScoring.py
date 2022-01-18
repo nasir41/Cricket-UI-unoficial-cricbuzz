@@ -4,23 +4,22 @@ import window as myui
 import UnofficialCricbuzzApi as api
 
 
-def UpdateTeamsLogo(selectedVs):
-    tName = selectedVs.split(" vs ")
-    if len(tName) == 2:
-        team1Name = tName[0]
-        team2Name = tName[1]
-        print(team1Name)
-        print(team2Name)
-        try:
-            myui.img0 = PhotoImage(file = f"images/{team1Name}.png")
-            if myui.img0 is not None:
-                myui.canvas.itemconfig(myui.team1_logo,image=myui.img0)
-            myui.img1 = PhotoImage(file = f"images/{team2Name}.png")
-            if myui.img1 is not None:
-                myui.canvas.itemconfig(myui.team2_logo,image=myui.img1)
-        except:
-            nameIssue =f"images/{team1Name}.png not found.."
-            print(nameIssue)
+def UpdateTeamsLogo(SelectdMatch):
+  
+    try:
+        team1Name=SelectdMatch['team1Name']
+        myui.img0 = PhotoImage(file = f"images/{team1Name}.png")
+        if myui.img0 is not None:
+            myui.canvas.itemconfig(myui.team1_logo,image=myui.img0)
+
+        team2Name=SelectdMatch['team2Name']    
+        myui.img1 = PhotoImage(file = f"images/{team2Name}.png")
+        if myui.img1 is not None:
+            myui.canvas.itemconfig(myui.team2_logo,image=myui.img1)
+    except:
+        nameIssue =f"images/{team1Name}.png not found.."
+        print(nameIssue)
+
         
 def UpdateUserInterface():
     global AllMatches,selectedVs
@@ -28,11 +27,17 @@ def UpdateUserInterface():
     if selectedVs == '':
         return
 
-    myui.canvas.itemconfig(myui.title_text,text=selectedVs)
-    Eid = api.GetMatchEid(AllMatches,selectedVs)
-    # match=api.CallMatchDetailsApi(Eid)
+   
+    
+    SelectdMatch = api.GetSelectdMatch(AllMatches,selectedVs)
+    matchId = SelectdMatch['matchId']
 
-    oversData=api.CallApiGetBowlers(Eid)
+    matchTitle = SelectdMatch['team1Name'] +" vs "+ SelectdMatch['team2Name']
+    myui.canvas.itemconfig(myui.title_text,text=matchTitle.upper())
+
+    # match=api.CallMatchDetailsApi(matchId)
+
+    oversData=api.CallApiGetBowlers(matchId)
     scorecard = api.GetScorecard(oversData)
     runrate = api.GetRunrate(oversData)
     matchStatus = api.GetMatchStatus(oversData)
@@ -66,7 +71,7 @@ def UpdateUserInterface():
     lastOutD = api.LastOutBatsman(oversData)
     myui.canvas.itemconfig(myui.partnership_text,text=lastOutD)
 
-    UpdateTeamsLogo(selectedVs)
+    UpdateTeamsLogo(SelectdMatch)
 
 
 def MatchSelected(arg):
@@ -75,8 +80,6 @@ def MatchSelected(arg):
     UpdateUserInterface()
 
     
-
-
 AllMatches=api.GetAllMatchesList()
 myui.window.title("Rizwan Sports Today")
 options = []
