@@ -1,9 +1,8 @@
 
-import imp
 from tkinter import PhotoImage
 import window as myui
-import CricAPI as api
-import time
+import UnofficialCricbuzzApi as api
+
 
 def UpdateTeamsLogo(selectedVs):
     tName = selectedVs.split(" vs ")
@@ -26,29 +25,31 @@ def UpdateTeamsLogo(selectedVs):
 def UpdateUserInterface():
     global AllMatches,selectedVs
     print(selectedVs)
-    if selectedVs is '':
+    if selectedVs == '':
         return
 
     myui.canvas.itemconfig(myui.title_text,text=selectedVs)
     Eid = api.GetMatchEid(AllMatches,selectedVs)
-    match=api.CallMatchDetailsApi(Eid)
-    scorecard = api.GetScorecard(match)
-    runrate = api.GetRunrate(match)
-    matchStatus = api.GetMatchStatus(match)
+    # match=api.CallMatchDetailsApi(Eid)
+
+    oversData=api.CallApiGetBowlers(Eid)
+    scorecard = api.GetScorecard(oversData)
+    runrate = api.GetRunrate(oversData)
+    matchStatus = api.GetMatchStatus(oversData)
     print(scorecard)
     print(runrate)
     print(matchStatus)
-    bowler1 = api.GetLastBowler(match)
+    bowler1 = api.GetLastBowler(oversData)
     print(bowler1)
-    bowler2  =api.GetSecondLastBowler(match)
+    bowler2  =api.GetSecondLastBowler(oversData)
     print(bowler2)
-    batsman1 = api.GetBatsman1(match)
+    batsman1 = api.GetBatsman1(oversData)
     print(batsman1)
 
-    batsman2  =api.GetBatsman2(match)
+    batsman2  =api.GetBatsman2(oversData)
     print(batsman2)
 
-    lastBall = api.GetLastBall(match)
+    lastBall = api.GetLastBall(oversData)
     
     
     
@@ -62,7 +63,7 @@ def UpdateUserInterface():
     myui.canvas.itemconfig(myui.batsman2_text,text=batsman2)
     myui.canvas.itemconfig(myui.lastBall_text,text=lastBall)
 
-    lastOutD = api.LastOutBatsman(match)
+    lastOutD = api.LastOutBatsman(oversData)
     myui.canvas.itemconfig(myui.partnership_text,text=lastOutD)
 
     UpdateTeamsLogo(selectedVs)
